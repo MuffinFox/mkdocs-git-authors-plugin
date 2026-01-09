@@ -144,8 +144,8 @@ class Page(AbstractRepoObject):
 
         re_sha = re.compile(r"^\w{40}")
 
-        args = ["-C",]
-        args.append(str(self._path.parent.absolute()))
+        args = []
+        args.append(str(self._path.parent.resolve()))
         args.append("blame")
         args.append(self._path.name)
 
@@ -154,8 +154,7 @@ class Page(AbstractRepoObject):
             args.append(self.repo().config("ignore_commits"))
         args.append("--porcelain")
         args.append("-w")  # Ignore whitespace changes
-        args.append(str(self._path))
-        cmd = GitCommand(args)
+        cmd = GitCommand("-C", args)
         cmd.run()
 
         lines = cmd.stdout()
